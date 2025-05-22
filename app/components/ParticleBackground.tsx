@@ -1,11 +1,47 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
+
+class Particle {
+  x: number;
+  y: number;
+  directionX: number;
+  directionY: number;
+  size: number;
+  
+  constructor(canvas: HTMLCanvasElement) {
+    this.size = 3;
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.directionX = (Math.random() - 0.5) * 0.8;
+    this.directionY = (Math.random() - 0.5) * 0.8;
+  }
+
+  update(canvas: HTMLCanvasElement) {
+    if (this.x > canvas.width || this.x < 0) {
+      this.directionX = -this.directionX;
+    }
+    if (this.y > canvas.height || this.y < 0) {
+      this.directionY = -this.directionY;
+    }
+
+    this.x += this.directionX;
+    this.y += this.directionY;
+  }
+
+  draw(ctx: CanvasRenderingContext2D, isDarkMode: boolean) {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = isDarkMode 
+      ? 'rgba(220, 220, 220, 0.5)' 
+      : 'rgba(150, 150, 150, 0.3)';
+    ctx.fill();
+  }
+}
 
 const ParticleBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
-  const [particles, setParticles] = useState<Particle[]>([]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -14,7 +50,6 @@ const ParticleBackground = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Set canvas size
     const handleResize = () => {
       if (canvas) {
         canvas.width = window.innerWidth;
@@ -23,66 +58,11 @@ const ParticleBackground = () => {
     };
     handleResize();
 
-    // Check if dark mode is enabled
     const isDarkMode = document.documentElement.classList.contains('dark');
-
-    // Particle class
-    class Particle {
-      x: number;
-      y: number;
-      directionX: number;
-      directionY: number;
-      size: number;
-      
-      constructor() {
-        this.x = 0;
-        this.y = 0;
-        this.directionX = 0;
-        this.directionY = 0;
-        this.size = 3;
-      }
-
-      init(canvas: HTMLCanvasElement) {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.directionX = (Math.random() - 0.5) * 0.8;
-        this.directionY = (Math.random() - 0.5) * 0.8;
-      }
-
-      update(canvas: HTMLCanvasElement) {
-        if (this.x > canvas.width || this.x < 0) {
-          this.directionX = -this.directionX;
-        }
-        if (this.y > canvas.height || this.y < 0) {
-          this.directionY = -this.directionY;
-        }
-
-        this.x += this.directionX;
-        this.y += this.directionY;
-      }
-
-      draw(ctx: CanvasRenderingContext2D) {
-        if (!ctx) return;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        // Lighter colors for both modes
-        ctx.fillStyle = isDarkMode 
-          ? 'rgba(220, 220, 220, 0.5)' 
-          : 'rgba(150, 150, 150, 0.3)';
-        ctx.fill();
-      }
-    }
 
     // Initialize particles
     const particleCount = 100;
-    const newParticles: Particle[] = [];
-    for (let i = 0; i < particleCount; i++) {
-      const particle = new Particle();
-      particle.init(canvas);
-      newParticles.push(particle);
-    }
-    particlesRef.current = newParticles;
-    setParticles(newParticles);
+    particlesRef.current = Array.from({ length: particleCount }, () => new Particle(canvas));
 
     // Animation loop
     const animate = () => {
@@ -92,7 +72,7 @@ const ParticleBackground = () => {
       
       particlesRef.current.forEach(particle => {
         particle.update(canvas);
-        particle.draw(ctx);
+        particle.draw(ctx, isDarkMode);
       });
       
       requestAnimationFrame(animate);

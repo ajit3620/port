@@ -43,7 +43,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center text-center px-4 pb-20">
+    <section id="hero" className="min-h-screen flex items-center justify-center relative overflow-hidden py-20">
       <ParticleBackground />
 
       {/* Background pattern - visible in light mode */}

@@ -26,40 +26,73 @@ const Navbar = () => {
     document.documentElement.classList.toggle('dark');
   };
 
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+    e.preventDefault();
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 py-5`}>
-      <div className="flex items-center justify-between px-4 md:pr-6">
+      <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
         {/* AB Logo */}
         <div className="w-[320px] flex justify-end pr-8">
-          <Link href="/" className="text-xl font-bold text-gray-900 dark:text-white hover:text-[#4A9EFF] dark:hover:text-[#4A9EFF] transition-colors">
+          <a 
+            href="#" 
+            onClick={(e) => scrollToSection(e, 'hero')}
+            className="text-xl font-bold text-gray-900 dark:text-white hover:text-[#4A9EFF] dark:hover:text-[#4A9EFF] transition-colors"
+          >
             AB
-          </Link>
+          </a>
         </div>
 
         <div className="flex items-center gap-10">
           {/* Navigation Links in Pill Container */}
           <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm px-8 py-3 rounded-full flex items-center gap-8">
-            <Link href="/" className="text-[15px] text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 px-3 py-1 rounded-full transition-all duration-200">
-              Home
-            </Link>
-            <Link href="#about" className="text-[15px] text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 px-3 py-1 rounded-full transition-all duration-200">
+            <a 
+              href="#about" 
+              onClick={(e) => scrollToSection(e, 'about')}
+              className="text-[15px] text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 px-3 py-1 rounded-full transition-all duration-200"
+            >
               About
-            </Link>
-            <Link href="#experience" className="text-[15px] text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 px-3 py-1 rounded-full transition-all duration-200">
+            </a>
+            <a 
+              href="#experience" 
+              onClick={(e) => scrollToSection(e, 'experience')}
+              className="text-[15px] text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 px-3 py-1 rounded-full transition-all duration-200"
+            >
               Experience
-            </Link>
-            <Link href="#projects" className="text-[15px] text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 px-3 py-1 rounded-full transition-all duration-200">
+            </a>
+            <a 
+              href="#projects" 
+              onClick={(e) => scrollToSection(e, 'projects')}
+              className="text-[15px] text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 px-3 py-1 rounded-full transition-all duration-200"
+            >
               Projects
-            </Link>
-            <Link href="#skills" className="text-[15px] text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 px-3 py-1 rounded-full transition-all duration-200">
+            </a>
+            <a 
+              href="#skills" 
+              onClick={(e) => scrollToSection(e, 'skills')}
+              className="text-[15px] text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 px-3 py-1 rounded-full transition-all duration-200"
+            >
               Skills
-            </Link>
-            <Link href="#certifications" className="text-[15px] text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 px-3 py-1 rounded-full transition-all duration-200">
+            </a>
+            <a 
+              href="#certifications" 
+              onClick={(e) => scrollToSection(e, 'certifications')}
+              className="text-[15px] text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 px-3 py-1 rounded-full transition-all duration-200"
+            >
               Certifications
-            </Link>
-            <Link href="#contact" className="text-[15px] text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 px-3 py-1 rounded-full transition-all duration-200">
+            </a>
+            <a 
+              href="#contact" 
+              onClick={(e) => scrollToSection(e, 'contact')}
+              className="text-[15px] text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 px-3 py-1 rounded-full transition-all duration-200"
+            >
               Contact
-            </Link>
+            </a>
           </div>
 
           {/* Dark Mode Toggle */}

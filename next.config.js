@@ -5,7 +5,7 @@ const nextConfig = {
     unoptimized: true,
   },
   basePath: '/port',
-  assetPrefix: '/port/',
+  assetPrefix: '/port'
 }
 
 module.exports = nextConfig 

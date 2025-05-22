@@ -52,7 +52,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl transform hover:-translate-y-2 flex flex-col h-full">
       <div className="relative h-48 w-full bg-[#000000] overflow-hidden">
         <Image
-          src={project.imageUrl}
+          src={`${process.env.NODE_ENV === 'production' ? '/port' : ''}${project.imageUrl}`}
           alt={project.title}
           fill
           className="object-cover"

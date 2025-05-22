@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const ParticleBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const particlesRef = useRef<Particle[]>([]);
+  const [particles, setParticles] = useState<Particle[]>([]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -13,12 +15,13 @@ const ParticleBackground = () => {
     if (!ctx) return;
 
     // Set canvas size
-    const setCanvasSize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight * 1.2; // Increased to 120% of viewport height
+    const handleResize = () => {
+      if (canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
     };
-    setCanvasSize();
-    window.addEventListener('resize', setCanvasSize);
+    handleResize();
 
     // Check if dark mode is enabled
     const isDarkMode = document.documentElement.classList.contains('dark');
@@ -32,14 +35,21 @@ const ParticleBackground = () => {
       size: number;
       
       constructor() {
+        this.x = 0;
+        this.y = 0;
+        this.directionX = 0;
+        this.directionY = 0;
+        this.size = 3;
+      }
+
+      init(canvas: HTMLCanvasElement) {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
         this.directionX = (Math.random() - 0.5) * 0.8;
         this.directionY = (Math.random() - 0.5) * 0.8;
-        this.size = 3;
       }
 
-      update() {
+      update(canvas: HTMLCanvasElement) {
         if (this.x > canvas.width || this.x < 0) {
           this.directionX = -this.directionX;
         }
@@ -51,7 +61,7 @@ const ParticleBackground = () => {
         this.y += this.directionY;
       }
 
-      draw() {
+      draw(ctx: CanvasRenderingContext2D) {
         if (!ctx) return;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -63,56 +73,36 @@ const ParticleBackground = () => {
       }
     }
 
-    // Create particle array
-    const particleArray: Particle[] = [];
-    const numberOfParticles = 150;
-
-    for (let i = 0; i < numberOfParticles; i++) {
-      particleArray.push(new Particle());
+    // Initialize particles
+    const particleCount = 100;
+    const newParticles: Particle[] = [];
+    for (let i = 0; i < particleCount; i++) {
+      const particle = new Particle();
+      particle.init(canvas);
+      newParticles.push(particle);
     }
-
-    // Connect particles that are close to each other
-    const connect = () => {
-      for (let i = 0; i < particleArray.length; i++) {
-        for (let j = i + 1; j < particleArray.length; j++) {
-          const dx = particleArray[i].x - particleArray[j].x;
-          const dy = particleArray[i].y - particleArray[j].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < 150) {
-            ctx.beginPath();
-            // Lighter colors for connections
-            const opacity = isDarkMode ? 0.4 - distance/500 : 0.25 - distance/500;
-            ctx.strokeStyle = isDarkMode 
-              ? `rgba(220, 220, 220, ${opacity})`
-              : `rgba(150, 150, 150, ${opacity})`;
-            ctx.lineWidth = 1;
-            ctx.moveTo(particleArray[i].x, particleArray[i].y);
-            ctx.lineTo(particleArray[j].x, particleArray[j].y);
-            ctx.stroke();
-          }
-        }
-      }
-    };
+    particlesRef.current = newParticles;
+    setParticles(newParticles);
 
     // Animation loop
     const animate = () => {
+      if (!canvas || !ctx) return;
+      
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      particleArray.forEach(particle => {
-        particle.update();
-        particle.draw();
+      particlesRef.current.forEach(particle => {
+        particle.update(canvas);
+        particle.draw(ctx);
       });
       
-      connect();
       requestAnimationFrame(animate);
     };
 
+    window.addEventListener('resize', handleResize);
     animate();
 
-    // Cleanup
     return () => {
-      window.removeEventListener('resize', setCanvasSize);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 

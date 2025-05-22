@@ -13,8 +13,8 @@ class Particle {
     this.size = 3;
     this.x = Math.random() * canvas.width;
     this.y = Math.random() * canvas.height;
-    this.directionX = (Math.random() - 0.5) * 0.8;
-    this.directionY = (Math.random() - 0.5) * 0.8;
+    this.directionX = (Math.random() - 0.5) * 1;
+    this.directionY = (Math.random() - 0.5) * 1;
   }
 
   update(canvas: HTMLCanvasElement) {
@@ -33,8 +33,8 @@ class Particle {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
     ctx.fillStyle = isDarkMode 
-      ? 'rgba(220, 220, 220, 0.5)' 
-      : 'rgba(150, 150, 150, 0.3)';
+      ? 'rgba(220, 220, 220, 0.8)' 
+      : 'rgba(150, 150, 150, 0.5)';
     ctx.fill();
   }
 }
@@ -61,14 +61,38 @@ const ParticleBackground = () => {
     const isDarkMode = document.documentElement.classList.contains('dark');
 
     // Initialize particles
-    const particleCount = 100;
+    const particleCount = 80;
     particlesRef.current = Array.from({ length: particleCount }, () => new Particle(canvas));
+
+    // Function to draw connections between particles
+    const connect = (particles: Particle[]) => {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 150) {  // Maximum distance for connection
+            ctx.beginPath();
+            ctx.strokeStyle = isDarkMode 
+              ? `rgba(220, 220, 220, ${0.4 - distance/750})`
+              : `rgba(150, 150, 150, ${0.3 - distance/750})`;
+            ctx.lineWidth = 1;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+    };
 
     // Animation loop
     const animate = () => {
       if (!canvas || !ctx) return;
       
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      connect(particlesRef.current);  // Draw connections first
       
       particlesRef.current.forEach(particle => {
         particle.update(canvas);

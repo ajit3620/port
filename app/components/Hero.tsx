@@ -58,16 +58,16 @@ const Hero = () => {
         <div className="stars3"></div>
       </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto mt-24">
-        <h1 className="text-5xl md:text-7xl font-bold mb-6">
+      <div className="relative z-10 max-w-4xl mx-auto mt-12">
+        <h1 className="text-5xl md:text-7xl font-bold mb-6 text-center">
           {renderText()}
           <span className="animate-blink">|</span>
         </h1>
         
-        <p className="text-gray-700 dark:text-gray-300 text-lg md:text-xl mb-12 leading-relaxed whitespace-pre-line">
-          I forge intelligent systems where data meets imagination,<br/>
-          translating real-world problems into code that learns, adapts, and scales.<br/>
-          With Python and TensorFlow as my toolkit and AWS as my playground,<br/>
+        <p className="text-gray-700 dark:text-gray-300 text-lg md:text-xl mb-12 leading-relaxed whitespace-pre-line text-center">
+          I forge intelligent systems where data meets imagination,
+          translating real-world problems into code that learns, adapts, and scales.
+          With Python and TensorFlow as my toolkit and AWS as my playground,
           I launch machine-learning–driven services that anticipate needs and grow with demand.
         </p>
 

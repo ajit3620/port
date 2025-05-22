@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // output: 'export',  // Comment out for local development
+  output: 'export',  // Enables static HTML export
   images: {
     unoptimized: true,
   },
-  // basePath: '/port',  // Comment out for local development
-  // assetPrefix: '/port'  // Comment out for local development
+  basePath: '/port',  // Required for GitHub Pages
+  assetPrefix: '/port'  // Required for GitHub Pages
 }
 
 module.exports = nextConfig 

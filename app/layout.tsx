@@ -5,23 +5,21 @@ import ClientWrapper from './components/ClientWrapper'
 
 const inter = Inter({ subsets: ['latin'] })
 
+const basePath = process.env.NODE_ENV === 'production' ? '/port' : '';
+
 export const metadata: Metadata = {
   title: 'Ajit Bhandarkar',
   description: 'Professional portfolio showcasing my work in software engineering, cloud solutions, and full-stack development.',
   icons: {
     icon: [
       {
-        url: '/favicon.ico',
-        sizes: 'any',
-      },
-      {
-        url: '/icon.png',
+        url: `${basePath}/icon.png`,
         type: 'image/png',
         sizes: '32x32',
       },
     ],
     apple: {
-      url: '/apple-icon.png',
+      url: `${basePath}/apple-icon.png`,
       type: 'image/png',
       sizes: '180x180',
     },

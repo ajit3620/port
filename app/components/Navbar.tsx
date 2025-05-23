@@ -36,9 +36,9 @@ const Navbar = () => {
 
   return (
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 py-5`}>
-      <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
+      <div className="max-w-[95rem] mx-auto px-24 flex items-center justify-between">
         {/* AB Logo */}
-        <div className="w-[320px] flex justify-end pr-8">
+        <div className="w-[200px] flex justify-start ml-16">
           <a 
             href="#" 
             onClick={(e) => scrollToSection(e, 'hero')}
@@ -48,9 +48,9 @@ const Navbar = () => {
           </a>
         </div>
 
-        <div className="flex items-center gap-10">
+        <div className="flex items-center gap-8">
           {/* Navigation Links in Pill Container */}
-          <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm px-8 py-3 rounded-full flex items-center gap-8">
+          <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm px-14 py-3 rounded-full flex items-center gap-10 ml-[38rem]">
             <a 
               href="#about" 
               onClick={(e) => scrollToSection(e, 'about')}

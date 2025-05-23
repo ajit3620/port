@@ -8,6 +8,24 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Ajit Bhandarkar',
   description: 'Professional portfolio showcasing my work in software engineering, cloud solutions, and full-stack development.',
+  icons: {
+    icon: [
+      {
+        url: '/favicon.ico',
+        sizes: 'any',
+      },
+      {
+        url: '/icon.png',
+        type: 'image/png',
+        sizes: '32x32',
+      },
+    ],
+    apple: {
+      url: '/apple-icon.png',
+      type: 'image/png',
+      sizes: '180x180',
+    },
+  },
 }
 
 export default function RootLayout({

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 interface Certification {
   title: string;
@@ -33,13 +33,39 @@ const certifications: Certification[] = [
 ];
 
 const Certifications = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-fade-up-visible');
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px'
+      }
+    );
+
+    const certCards = document.querySelectorAll('.cert-card');
+    certCards.forEach((card, index) => {
+      (card as HTMLElement).style.transitionDelay = `${index * 100}ms`;
+      observer.observe(card);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="certifications" className="min-h-screen flex items-center py-20 bg-white dark:bg-gray-900">
+    <section ref={sectionRef} id="certifications" className="min-h-screen flex items-center py-20 bg-white dark:bg-gray-900">
       <div className="max-w-6xl mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center mb-4 text-gray-900 dark:text-white">
+        <h2 className="text-4xl font-bold text-center mb-4 text-gray-900 dark:text-white opacity-0 translate-y-10 animate-fade-up">
           Certifications
         </h2>
-        <p className="text-gray-600 dark:text-gray-300 text-center mb-12 max-w-2xl mx-auto">
+        <p className="text-gray-600 dark:text-gray-300 text-center mb-12 max-w-2xl mx-auto opacity-0 translate-y-10 animate-fade-up">
           Professional certifications and achievements that validate my expertise
         </p>
         
@@ -47,7 +73,7 @@ const Certifications = () => {
           {certifications.map((cert, index) => (
             <div
               key={index}
-              className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700"
+              className="cert-card bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 opacity-0 translate-y-10"
             >
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">

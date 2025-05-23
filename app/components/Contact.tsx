@@ -1,16 +1,42 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const Contact = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-fade-up-visible');
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px'
+      }
+    );
+
+    const contactCards = document.querySelectorAll('.contact-card');
+    contactCards.forEach((card, index) => {
+      (card as HTMLElement).style.transitionDelay = `${index * 100}ms`;
+      observer.observe(card);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="contact" className="min-h-screen flex items-center bg-gray-50 dark:bg-gray-900/50 py-20">
+    <section ref={sectionRef} id="contact" className="min-h-screen flex items-center bg-gray-50 dark:bg-gray-900/50 py-20">
       <div className="max-w-4xl mx-auto px-4 w-full">
-        <h2 className="text-5xl font-bold text-center mb-6 text-gray-900 dark:text-white animate-fade-in">Get in Touch</h2>
-        <p className="text-gray-600 dark:text-gray-300 text-center mb-16 max-w-2xl mx-auto animate-fade-in-delay text-lg">
+        <h2 className="text-5xl font-bold text-center mb-6 text-gray-900 dark:text-white opacity-0 translate-y-10 animate-fade-up">Get in Touch</h2>
+        <p className="text-gray-600 dark:text-gray-300 text-center mb-16 max-w-2xl mx-auto opacity-0 translate-y-10 animate-fade-up text-lg">
           Feel free to reach out for collaborations or just a friendly hello
         </p>
         
-        <div className="grid md:grid-cols-2 gap-12 animate-fade-in-delay-2">
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow transform hover:-translate-y-1">
+        <div className="grid md:grid-cols-2 gap-12">
+          <div className="contact-card bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow transform hover:-translate-y-1 opacity-0 translate-y-10">
             <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Drop me a line at</h3>
             <div className="space-y-4">
               <a
@@ -76,7 +102,7 @@ const Contact = () => {
             </div>
           </div>
           
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow transform hover:-translate-y-1">
+          <div className="contact-card bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow transform hover:-translate-y-1 opacity-0 translate-y-10">
             <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Location</h3>
             <p className="text-gray-600 dark:text-gray-300 mb-4">
               Based in Los Angeles, California
@@ -92,7 +118,7 @@ const Contact = () => {
           </div>
         </div>
 
-        <div className="mt-16 text-center animate-fade-in-delay-3">
+        <div className="mt-16 text-center opacity-0 translate-y-10 animate-fade-up">
           <a
             href="/resume.pdf"
             className="inline-flex items-center px-8 py-4 border-2 border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/50 transition transform hover:scale-105 group"

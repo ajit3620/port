@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 
 interface Project {
@@ -49,7 +49,7 @@ const projects: Project[] = [
 
 const ProjectCard = ({ project }: { project: Project }) => {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl transform hover:-translate-y-2 flex flex-col h-full">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-500 hover:shadow-xl transform hover:-translate-y-2 flex flex-col h-full opacity-0 translate-y-10 animate-fade-up">
       <div className="relative h-48 w-full bg-[#000000] overflow-hidden">
         <Image
           src={`${process.env.NODE_ENV === 'production' ? '/port' : ''}${project.imageUrl}`}
@@ -98,14 +98,37 @@ const ProjectCard = ({ project }: { project: Project }) => {
 };
 
 const Projects = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-fade-up-visible');
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px'
+      }
+    );
+
+    const projectCards = document.querySelectorAll('.animate-fade-up');
+    projectCards.forEach((card) => observer.observe(card));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="projects" className="py-20 bg-white dark:bg-gray-900">
+    <section ref={sectionRef} id="projects" className="py-20 bg-white dark:bg-gray-900">
       <div className="max-w-6xl mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center mb-4 text-gray-900 dark:text-white animate-fade-in">Featured Projects</h2>
-        <p className="text-gray-600 dark:text-gray-300 text-center mb-12 max-w-2xl mx-auto animate-fade-in-delay">
+        <h2 className="text-4xl font-bold text-center mb-4 text-gray-900 dark:text-white opacity-0 translate-y-10 animate-fade-up">Featured Projects</h2>
+        <p className="text-gray-600 dark:text-gray-300 text-center mb-12 max-w-2xl mx-auto opacity-0 translate-y-10 animate-fade-up">
           A showcase of my recent work, featuring projects built with modern technologies and best practices.
         </p>
-        <div className="grid gap-8 animate-fade-in-delay-2">
+        <div className="grid gap-8">
           {/* First row with 3 projects */}
           <div className="grid md:grid-cols-3 gap-8">
             {projects.slice(0, 3).map((project, index) => (
@@ -119,7 +142,7 @@ const Projects = () => {
             ))}
           </div>
         </div>
-        <div className="text-center mt-12 animate-fade-in-delay-3">
+        <div className="text-center mt-12 opacity-0 translate-y-10 animate-fade-up">
           <a
             href="https://github.com/ajit3620"
             target="_blank"

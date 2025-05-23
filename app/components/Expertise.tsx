@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 
 interface Skill {
@@ -43,13 +43,40 @@ const skills: Skill[] = [
 ];
 
 const Expertise = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-fade-up-visible');
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px'
+      }
+    );
+
+    const skillCards = document.querySelectorAll('.skill-card');
+    skillCards.forEach((card, index) => {
+      // Add staggered animation delay
+      card.style.transitionDelay = `${index * 50}ms`;
+      observer.observe(card);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="skills" className="pt-32 pb-64 bg-gray-50 dark:bg-gray-900/50">
+    <section ref={sectionRef} id="skills" className="pt-32 pb-64 bg-gray-50 dark:bg-gray-900/50">
       <div className="max-w-6xl mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center mb-4 text-gray-900 dark:text-white">
+        <h2 className="text-4xl font-bold text-center mb-4 text-gray-900 dark:text-white opacity-0 translate-y-10 animate-fade-up">
           My Expertise
         </h2>
-        <p className="text-gray-600 dark:text-gray-300 text-center mb-16 max-w-2xl mx-auto">
+        <p className="text-gray-600 dark:text-gray-300 text-center mb-16 max-w-2xl mx-auto opacity-0 translate-y-10 animate-fade-up">
           Hover over the skills to explore my technical proficiencies
         </p>
         
@@ -57,7 +84,7 @@ const Expertise = () => {
           {skills.map((skill, index) => (
             <div
               key={index}
-              className="group relative flex items-center justify-center p-4 bg-white dark:bg-gray-800/80 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border border-gray-100 dark:border-gray-700 dark:backdrop-blur-sm dark:hover:bg-gray-700/90"
+              className="skill-card group relative flex items-center justify-center p-4 bg-white dark:bg-gray-800/80 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border border-gray-100 dark:border-gray-700 dark:backdrop-blur-sm dark:hover:bg-gray-700/90 opacity-0 translate-y-10"
             >
               <div className="relative w-12 h-12 dark:bg-gray-700/50 rounded-lg p-2 dark:shadow-[0_0_15px_rgba(255,255,255,0.1)] dark:group-hover:shadow-[0_0_20px_rgba(255,255,255,0.15)]">
                 <Image
@@ -68,11 +95,10 @@ const Expertise = () => {
                 />
               </div>
               
-              {/* Tooltip with enhanced visibility */}
+              {/* Tooltip */}
               <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-900/95 dark:bg-gray-700/95 text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 whitespace-nowrap z-10 backdrop-blur-sm shadow-xl">
                 <div className="font-medium">{skill.name}</div>
                 <div className="text-xs text-gray-300">{skill.description}</div>
-                {/* Arrow */}
                 <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full">
                   <div className="border-8 border-transparent border-t-gray-900/95 dark:border-t-gray-700/95" />
                 </div>

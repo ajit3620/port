@@ -3,6 +3,7 @@ const nextConfig = {
   output: 'export',
   basePath: '/port',
   assetPrefix: '/port/',
+  trailingSlash: true,
   images: {
     unoptimized: true
   }

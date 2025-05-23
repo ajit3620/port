@@ -6,7 +6,7 @@ import ClientWrapper from './components/ClientWrapper'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Ajit Bhandarkar - Software Engineer',
+  title: 'Ajit Bhandarkar',
   description: 'Professional portfolio showcasing my work in software engineering, cloud solutions, and full-stack development.',
 }
 

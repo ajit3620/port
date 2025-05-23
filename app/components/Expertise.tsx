@@ -63,7 +63,7 @@ const Expertise = () => {
     const skillCards = document.querySelectorAll('.skill-card');
     skillCards.forEach((card, index) => {
       // Add staggered animation delay
-      card.style.transitionDelay = `${index * 50}ms`;
+      (card as HTMLElement).style.transitionDelay = `${index * 50}ms`;
       observer.observe(card);
     });
 
